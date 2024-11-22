@@ -23,7 +23,8 @@ function assets(){
     wp_enqueue_script('boostraps', 'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js', array('jquery','popper'),'4.4.1', true);
     wp_enqueue_script('custom', get_template_directory_uri().'/assets/js/custom.js', '', '1.0', true);
     wp_localize_script('custom', 'pg', array(
-        'ajaxurl' => admin_url('admin-ajax.php')
+        'ajaxurl' => admin_url('admin-ajax.php'),
+        'apiurl' => home_url('wp-json/pg/v1/')
     ));
 }
 
@@ -125,3 +126,41 @@ function pgFiltroProductos() {
 }
 add_action("wp_ajax_pgFiltroProductos", "pgFiltroProductos");
 add_action("wp_ajax_nopriv_pgFiltroProductos", "pgFiltroProductos");
+
+
+function novedadesAPI() {
+    register_rest_route(
+        'pg/v1',
+        '/novedades/(?P<cantidad>\d+)',
+        array(
+            'methods' => 'GET',
+            'callback' => 'pedidoNovedades'
+        )
+    );
+}
+add_action('rest_api_init', 'novedadesAPI');
+
+function pedidoNovedades($data) {
+
+    $args = array(
+        'post_type' => 'post',
+        'posts_per_page' => $data['cantidad'],
+        'order' => 'ASC',
+        'orderby' => 'title',
+    );
+    $novedades = new WP_Query($args);
+
+    if ($novedades->have_posts()) {
+        $return = array();
+        while ($novedades->have_posts()) {
+            $novedades->the_post();
+            $return[] = array(
+                'imagen' => get_the_post_thumbnail(get_the_ID(), 'large'),
+                'link' => get_the_permalink(),
+                'titulo' => get_the_title()
+            );
+        }
+        return $return;
+    }
+
+}
