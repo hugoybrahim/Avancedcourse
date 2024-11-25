@@ -149,8 +149,15 @@ __webpack_require__.r(__webpack_exports__);
   category: "layout",
   attributes: {
     content: {
-      type: "string",
-      default: "Hello World"
+      type: 'string',
+      // Definimos el tipo de dato que debe esperar el componente. En este caso es un texto, por eso lo declaramos como string.
+      default: 'Hello world' // Definimos el valor por defecto.
+    },
+    mediaURL: {
+      type: 'string' // Definimos el tipo de dato que debe esperar el componente. En este caso es un texto (URL de la imagen), por eso lo declaramos como string.
+    },
+    mediaAlt: {
+      type: 'string' // Definimos el tipo de dato que debe esperar el componente. En este caso es un texto (Texto Alternativo de la imagen), por eso lo declaramos como string.
     }
   },
   edit: props => {
@@ -169,12 +176,20 @@ __webpack_require__.r(__webpack_exports__);
         content: newContent
       });
     };
+
+    // Función para guardar el atributo mediaURL y mediaAlt
+    const handlerOnSelectMediaUpload = image => {
+      setAttributes({
+        mediaURL: image.sizes.full.url,
+        mediaAlt: image.alt
+      });
+    };
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelBody // Primer panel en la sidebar
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelBody // Primer panel en la sidebar
         , {
           title: "Modificar texto del Bloque B\xE1sico",
-          initialOpen: false,
+          initialOpen: true,
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelRow, {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
               label: "Complete el campo" // Indicaciones del campo
@@ -184,7 +199,30 @@ __webpack_require__.r(__webpack_exports__);
               onChange: handlerOnChangeInput // Asignación de función para gestionar el evento OnChange
             })
           })
-        })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelBody // Segundo panel en la sidebar
+        , {
+          title: "Seleccion\xE1 una imagen",
+          initialOpen: true,
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.PanelRow, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.MediaUpload, {
+              onSelect: handlerOnSelectMediaUpload // Asignación de función para gestionar el evento OnSelect
+              ,
+              type: "image" // Limita los tipos de archivos que se pueden seleccionar
+              // Se envía el evento open y el renderizado del elemento que desencadenará la apertura de la librería, en este caso un botón
+              ,
+              render: ({
+                open
+              }) => {
+                //Agregamos las clases de los botones de WordPress habituales para que mantenga el estilo dentro del editor
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(Button, {
+                  className: "components-icon-button image-block-btn is-button is-default is-large",
+                  onClick: open,
+                  children: "Elegir una imagen"
+                });
+              }
+            })
+          })
+        })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((_wordpress_server_side_render__WEBPACK_IMPORTED_MODULE_3___default()) // Renderizado de bloque dinámico
       , {
         block: "pg/basic" // Nombre del bloque

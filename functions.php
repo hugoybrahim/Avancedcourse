@@ -183,6 +183,12 @@ function pgRegisterBlock() {
                 'content' => array(
                     'type'    => 'string',
                     'default' => 'Hello world'
+                ),
+                'mediaURL' => array(
+                    'type'    => 'string'
+                ),
+                'mediaAlt' => array(
+                    'type'    => 'string'
                 )
             ),
             'render_callback' => 'pgRenderDinamycBlok'
@@ -192,6 +198,26 @@ function pgRegisterBlock() {
 }
 add_action('init', 'pgRegisterBlock');
 
-function pgRenderDinamycBlok($attributes, $content) {
-    return "<h2>" . $attributes['content'] . "</h2>";
+function pgRenderDinamycBlock($attributes, $content)
+{
+    return (
+        '<h1 class="my-3">'.$attributes['content'].'</h1>
+        <img src="'.$attributes['mediaURL'].'" alt="'.$attributes['mediaAlt'].'" />
+        <hr>'
+    );
 }
+/* 
+function acfRegisterBlocks() {
+    acf_register_block(
+        array(
+            'name' => 'pg-institucional',
+            'title' => 'Institucional',
+            'description' => '',
+            'render_template' => get_template_directory().'/template-parts/institucional.php',
+            'category' => 'layout',
+            'icon' => 'settings',
+            'mode' => 'edit'
+        )
+    );
+}
+add_action('acf/init', 'acfRegisterBlocks'); */
