@@ -177,7 +177,21 @@ function pgRegisterBlock() {
 
     register_block_type(
         'pg/basic',
-        array('editor_script' => 'pg-block')
+        array(
+            'editor_script' => 'pg-block',
+            'attributes'      => array(
+                'content' => array(
+                    'type'    => 'string',
+                    'default' => 'Hello world'
+                )
+            ),
+            'render_callback' => 'pgRenderDinamycBlok'
+        )
+
     );
 }
 add_action('init', 'pgRegisterBlock');
+
+function pgRenderDinamycBlok($attributes, $content) {
+    return "<h2>" . $attributes['content'] . "</h2>";
+}
